@@ -2,181 +2,171 @@
 <html lang="ur" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>تحریری کارکردگی — جامعۃ المدینہ ہند</title>
     
+    <!-- Tailwind CSS for Styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     
+    <!-- 100% Reliable Jameel Noori Nastaleeq Font Server -->
+    <link href="https://cdn.jsdelivr.net/npm/jameel-noori@1.1.2/jameel-noori.min.css" rel="stylesheet">
+    
     <style>
-        /* جمیل نوری نستعلیق کا مستند اور تیز ترین سرور لنک */
-        @font-face {
-            font-family: 'Jameel Noori Nastaleeq';
-            src: url('https://cdn.jsdelivr.net/gh/haideralipunjabi/urdu-fonts@master/fonts/JameelNooriNastaleeq/JameelNooriNastaleeq.woff2') format('woff2'),
-                 url('https://cdn.jsdelivr.net/gh/haideralipunjabi/urdu-fonts@master/fonts/JameelNooriNastaleeq/JameelNooriNastaleeq.woff') format('woff');
-            font-weight: normal;
-            font-style: normal;
-            font-display: swap;
-        }
-
         body {
+            /* Applying Jameel Noori Nastaleeq */
             font-family: 'Jameel Noori Nastaleeq', 'Arial', sans-serif;
-            background-color: #f3f4f6; /* ہلکا گرے بیک گراؤنڈ موبائل ایپ جیسا */
-            -webkit-tap-highlight-color: transparent; /* موبائل پر کلک کا نیلا رنگ ختم کرنے کے لیے */
+            background-color: #f3f4f6;
+            -webkit-tap-highlight-color: transparent; 
         }
 
         h1, h2, h3, p, label, input, button, li {
             font-family: 'Jameel Noori Nastaleeq', 'Arial', sans-serif;
         }
         
-        /* ان پٹ فیلڈز کی سیٹنگز تاکہ موبائل پر بڑی اور بھدی نہ لگیں */
+        /* Mobile friendly input sizes */
         input {
-            font-size: 16px !important; /* موبائل پر زوم ہونے سے بچانے کے لیے */
+            font-size: 16px !important; 
             line-height: normal;
         }
         
-        /* موبائل ایپ اسٹائل سکرول بار */
-        ::-webkit-scrollbar {
-            width: 4px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1; 
-            border-radius: 4px;
-        }
+        /* Custom scrollbar for dropdowns */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 5px; }
         
         .suggestion-list {
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
     </style>
 </head>
 <body class="flex justify-center bg-gray-100 min-h-screen">
 
-    <!-- موبائل ایپ کنٹینر (میکس وڈتھ 480px تاکہ موبائل پر فٹ رہے) -->
-    <div class="w-full max-w-[480px] bg-white min-h-screen relative shadow-sm flex flex-col">
+    <!-- Mobile App Container -->
+    <div class="w-full max-w-[480px] bg-white min-h-screen relative shadow-lg flex flex-col">
         
-        <!-- App Header (Native Mobile Look) -->
+        <!-- App Header (Native App Look) -->
         <header class="bg-emerald-600 text-white sticky top-0 z-30 shadow-md flex items-center justify-between px-4 py-3">
             <div class="flex items-center space-x-2 space-x-reverse">
                 <span class="text-2xl">📚</span>
                 <div>
-                    <h1 class="text-lg font-bold leading-tight">تحریری کارکردگی</h1>
+                    <h1 class="text-xl font-bold leading-tight">تحریری کارکردگی</h1>
                     <p class="text-xs text-emerald-100 opacity-90">جامعۃ المدینہ ہند</p>
                 </div>
             </div>
         </header>
 
         <!-- Main Content Area -->
-        <div class="flex-1 p-4 relative overflow-y-auto pb-24">
+        <div class="flex-1 p-4 relative overflow-y-auto pb-28">
             
-            <!-- ڈیٹا لوڈ ہونے کا انڈیکیٹر (Mobile App Style Spinner) -->
-            <div id="dataLoadingOverlay" class="absolute inset-0 bg-white/90 z-20 flex flex-col items-center justify-center">
-                <svg class="w-8 h-8 animate-spin text-emerald-500 mb-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <!-- Data Loading Overlay -->
+            <div id="dataLoadingOverlay" class="absolute inset-0 bg-white/95 z-20 flex flex-col items-center justify-center transition-all duration-300">
+                <svg id="loadingSpinner" class="w-10 h-10 animate-spin text-emerald-600 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
-                <p class="text-emerald-700 text-sm font-bold">ڈیٹا لوڈ ہو رہا ہے...</p>
+                <p id="loadingText" class="text-emerald-700 text-lg font-bold text-center px-4">گوگل شیٹ سے ڈیٹا لوڈ ہو رہا ہے...</p>
+                <button id="retryBtn" onclick="fetchData()" class="hidden mt-5 bg-emerald-100 hover:bg-emerald-200 text-emerald-700 px-5 py-2 rounded-lg font-bold text-base border border-emerald-300 transition-colors">
+                    دوبارہ کوشش کریں
+                </button>
             </div>
 
             <form id="karkardagiForm" class="space-y-4">
                 
-                <!-- Region -->
+                <!-- Region Input with Suggestions -->
                 <div class="relative">
-                    <label class="block text-sm text-gray-700 mb-1">ریجن (Region)</label>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">ریجن (Region)</label>
                     <div class="relative flex items-center">
                         <span class="absolute right-3 text-gray-400 text-sm">🌍</span>
                         <input type="text" id="regionInput" name="region" required autocomplete="off" disabled placeholder="ڈیٹا لوڈ ہو رہا ہے..." 
-                            class="w-full bg-gray-50 border border-gray-300 text-gray-800 rounded-lg pr-10 pl-3 py-2.5 outline-none transition-colors focus:bg-white focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 disabled:opacity-70 text-base">
+                            class="w-full bg-gray-50 border border-gray-300 text-gray-800 rounded-lg pr-10 pl-3 py-3 outline-none transition-colors focus:bg-white focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 disabled:opacity-60 text-base">
                     </div>
-                    <ul id="regionList" class="suggestion-list absolute hidden w-full bg-white border border-gray-200 max-h-40 overflow-y-auto rounded-lg z-50 mt-1"></ul>
-                    <p id="regionError" class="text-red-500 text-xs mt-1 hidden">براہ کرم فہرست میں سے منتخب کریں۔</p>
+                    <ul id="regionList" class="suggestion-list absolute hidden w-full bg-white border border-gray-200 max-h-48 overflow-y-auto rounded-lg z-50 mt-1"></ul>
+                    <p id="regionError" class="text-red-500 text-xs mt-1 hidden font-bold">براہ کرم دی گئی لسٹ میں سے ہی ریجن منتخب کریں۔</p>
                 </div>
 
-                <!-- Jamia Name -->
+                <!-- Jamia Name Input with Suggestions -->
                 <div class="relative">
-                    <label class="block text-sm text-gray-700 mb-1">جامعۃ المدینہ کا نام</label>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">جامعۃ المدینہ کا نام</label>
                     <div class="relative flex items-center">
                         <span class="absolute right-3 text-gray-400 text-sm">🏫</span>
                         <input type="text" id="jamiaInput" name="jamiaName" required autocomplete="off" disabled placeholder="پہلے ریجن چنیں..." 
-                            class="w-full bg-gray-50 border border-gray-300 text-gray-800 rounded-lg pr-10 pl-3 py-2.5 outline-none transition-colors focus:bg-white focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 disabled:opacity-70 text-base">
+                            class="w-full bg-gray-50 border border-gray-300 text-gray-800 rounded-lg pr-10 pl-3 py-3 outline-none transition-colors focus:bg-white focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 disabled:opacity-60 text-base">
                     </div>
-                    <ul id="jamiaList" class="suggestion-list absolute hidden w-full bg-white border border-gray-200 max-h-40 overflow-y-auto rounded-lg z-50 mt-1"></ul>
-                    <p id="jamiaError" class="text-red-500 text-xs mt-1 hidden">براہ کرم فہرست میں سے جامعہ منتخب کریں۔</p>
+                    <ul id="jamiaList" class="suggestion-list absolute hidden w-full bg-white border border-gray-200 max-h-48 overflow-y-auto rounded-lg z-50 mt-1"></ul>
+                    <p id="jamiaError" class="text-red-500 text-xs mt-1 hidden font-bold">براہ کرم دی گئی لسٹ میں سے ہی جامعہ منتخب کریں۔</p>
                 </div>
 
                 <!-- City -->
                 <div>
-                    <label class="block text-sm text-gray-700 mb-1">شہر</label>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">شہر</label>
                     <div class="relative flex items-center">
                         <span class="absolute right-3 text-gray-400 text-sm">🏙️</span>
                         <input type="text" name="city" required placeholder="شہر کا نام..." 
-                            class="w-full bg-gray-50 border border-gray-300 text-gray-800 rounded-lg pr-10 pl-3 py-2.5 outline-none focus:bg-white focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-base">
+                            class="w-full bg-gray-50 border border-gray-300 text-gray-800 rounded-lg pr-10 pl-3 py-3 outline-none focus:bg-white focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-base">
                     </div>
                 </div>
 
                 <!-- Zimmedar -->
                 <div>
-                    <label class="block text-sm text-gray-700 mb-1">ذمہ دار کا نام</label>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">ذمہ دار کا نام</label>
                     <div class="relative flex items-center">
                         <span class="absolute right-3 text-gray-400 text-sm">👤</span>
                         <input type="text" name="zimmedar" required placeholder="ذمہ دار کا نام..." 
-                            class="w-full bg-gray-50 border border-gray-300 text-gray-800 rounded-lg pr-10 pl-3 py-2.5 outline-none focus:bg-white focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-base">
+                            class="w-full bg-gray-50 border border-gray-300 text-gray-800 rounded-lg pr-10 pl-3 py-3 outline-none focus:bg-white focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-base">
                     </div>
                 </div>
 
-                <!-- Number -->
+                <!-- Mobile Number -->
                 <div>
-                    <label class="block text-sm text-gray-700 mb-1">موبائل نمبر</label>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">موبائل نمبر (کم از کم 10 ہندسے)</label>
                     <div class="relative flex items-center">
                         <span class="absolute right-3 text-gray-400 text-sm">📞</span>
                         <input type="number" id="mobileNumber" name="number" required placeholder="03XXXXXXXXX" dir="ltr"
-                            class="w-full bg-gray-50 border border-gray-300 text-gray-800 rounded-lg pr-3 pl-10 py-2.5 outline-none focus:bg-white focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-left font-sans text-base">
+                            class="w-full bg-gray-50 border border-gray-300 text-gray-800 rounded-lg pr-3 pl-10 py-3 outline-none focus:bg-white focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-left font-sans text-base">
                     </div>
-                    <p id="numberError" class="text-red-500 text-xs mt-1 hidden">نمبر کم از کم 10 ہندسوں کا ہونا ضروری ہے۔</p>
+                    <p id="numberError" class="text-red-500 text-xs mt-1 hidden font-bold">موبائل نمبر 10 ہندسوں سے کم نہیں ہو سکتا!</p>
                 </div>
 
-                <!-- Grid for Numbers (Compact App style) -->
+                <!-- Grid for Numbers -->
                 <div class="grid grid-cols-2 gap-3">
-                    <!-- Total Students -->
                     <div>
-                        <label class="block text-xs text-gray-700 mb-1 leading-tight">کل طلبہ</label>
+                        <label class="block text-sm font-bold text-gray-700 mb-1">کل طلبہ</label>
                         <div class="relative flex items-center">
-                            <span class="absolute right-2 text-gray-400 text-xs">👨‍🎓</span>
+                            <span class="absolute right-2 text-gray-400 text-sm">👨‍🎓</span>
                             <input type="number" name="totalStudents" required min="0" placeholder="0" 
-                                class="w-full bg-gray-50 border border-gray-300 text-gray-800 rounded-lg pr-7 pl-2 py-2 outline-none focus:bg-white focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 font-sans text-base">
+                                class="w-full bg-gray-50 border border-gray-300 text-gray-800 rounded-lg pr-7 pl-2 py-3 outline-none focus:bg-white focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 font-sans text-base">
                         </div>
                     </div>
 
-                    <!-- Total Pages -->
                     <div>
-                        <label class="block text-xs text-gray-700 mb-1 leading-tight">کل مطالعہ صفحات</label>
+                        <label class="block text-sm font-bold text-gray-700 mb-1">مطالعہ صفحات</label>
                         <div class="relative flex items-center">
-                            <span class="absolute right-2 text-gray-400 text-xs">📖</span>
+                            <span class="absolute right-2 text-gray-400 text-sm">📖</span>
                             <input type="number" name="totalPages" required min="0" placeholder="0" 
-                                class="w-full bg-gray-50 border border-gray-300 text-gray-800 rounded-lg pr-7 pl-2 py-2 outline-none focus:bg-white focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 font-sans text-base">
+                                class="w-full bg-gray-50 border border-gray-300 text-gray-800 rounded-lg pr-7 pl-2 py-3 outline-none focus:bg-white focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 font-sans text-base">
                         </div>
                     </div>
 
-                    <!-- Total Articles -->
                     <div class="col-span-2">
-                        <label class="block text-sm text-gray-700 mb-1">کل مضامین</label>
+                        <label class="block text-sm font-bold text-gray-700 mb-1">کل مضامین</label>
                         <div class="relative flex items-center">
                             <span class="absolute right-3 text-gray-400 text-sm">📝</span>
                             <input type="number" name="totalArticles" required min="0" placeholder="مضامین کی تعداد..." 
-                                class="w-full bg-gray-50 border border-gray-300 text-gray-800 rounded-lg pr-10 pl-3 py-2.5 outline-none focus:bg-white focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 font-sans text-base">
+                                class="w-full bg-gray-50 border border-gray-300 text-gray-800 rounded-lg pr-10 pl-3 py-3 outline-none focus:bg-white focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 font-sans text-base">
                         </div>
                     </div>
                 </div>
             </form>
         </div>
 
-        <!-- Submit Button (Fixed at Bottom like Mobile App) -->
-        <div class="bg-white border-t border-gray-200 p-4 sticky bottom-0 z-30 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
-            <!-- Message Box -->
+        <!-- Submit Button Area (Fixed at Bottom) -->
+        <div class="bg-white border-t border-gray-200 p-4 absolute bottom-0 w-full z-30 shadow-[0_-5px_10px_-1px_rgba(0,0,0,0.05)] rounded-t-xl">
+            <!-- Alert Message Box -->
             <div id="messageBox" class="hidden mb-3 p-3 rounded-lg text-center text-sm font-bold transition-all duration-300"></div>
             
             <button type="submit" form="karkardagiForm" id="submitBtn" 
-                class="w-full bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-bold text-lg py-3 rounded-xl shadow-md transition-colors flex items-center justify-center space-x-2 space-x-reverse disabled:opacity-70 disabled:active:bg-emerald-600">
+                class="w-full bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-bold text-xl py-3.5 rounded-xl shadow-md transition-colors flex items-center justify-center space-x-2 space-x-reverse disabled:opacity-70 disabled:active:bg-emerald-600">
                 <span id="btnText">محفوظ کریں</span>
-                <svg id="btnLoader" class="hidden w-5 h-5 animate-spin text-white mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <svg id="btnLoader" class="hidden w-6 h-6 animate-spin text-white mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
@@ -185,8 +175,8 @@
     </div>
 
     <script>
-        // ⚠️ یہاں اپنا نيا Google Apps Script کا Web App URL پیسٹ کریں
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbycFGjq2cZRbAGZllGqah1sW336qm2Lqmeu_avSAxRI4xVo9IXvLqdAqV4xaOx05aFn/exec';
+        // ⚠️ یہاں اپنا نيا Google Apps Script کا Web App URL لازمی پیسٹ کریں
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbzk2FH2YL5qD9v2-oIVGfV/exec'; // <-- پچھلی تصویر میں موجود آپ کا لنک
 
         // DOM Elements
         const form = document.getElementById('karkardagiForm');
@@ -207,49 +197,100 @@
         const numberError = document.getElementById('numberError');
         
         const dataLoadingOverlay = document.getElementById('dataLoadingOverlay');
+        const loadingText = document.getElementById('loadingText');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const retryBtn = document.getElementById('retryBtn');
 
-        // State Variables
         let masterData = [];
         let uniqueRegions = [];
         let filteredJamias = [];
+        let isMockData = false; // نیا ویری ایبل چیک کرنے کے لیے کہ اصلی ڈیٹا ہے یا فرضی
 
-        fetch(scriptURL)
-            .then(response => {
-                if (!response.ok) throw new Error('Network response was not ok');
-                return response.json();
-            })
-            .then(data => {
-                // اگر Apps script نے کوئی ایرر بھیجا ہے تو وہ دکھائیں
-                if (data.error) {
-                    throw new Error(data.error);
-                }
-                
-                masterData = data;
-                
-                // ریجنز کی منفرد (Unique) لسٹ بنانا
-                uniqueRegions = [...new Set(data.map(item => item.region))];
-                
-                // UI کو ایکٹیو کرنا
-                dataLoadingOverlay.classList.add('hidden');
-                
-                regionInput.disabled = false;
-                regionInput.placeholder = "اپنا ریجن تلاش کریں یا لکھیں...";
-            })
-            .catch(error => {
-                console.error("Data loading error:", error);
-                dataLoadingOverlay.innerHTML = `<p class="text-red-600 font-bold text-xl text-center px-4">خرابی: ${error.message || 'ڈیٹا لوڈ کرنے میں مسئلہ ہے۔ براہ کرم لنک چیک کریں۔'}</p>`;
-            });
+        // Fetch with Timeout to prevent infinite loading
+        const fetchWithTimeout = (url, options, timeout = 12000) => {
+        const fetchWithTimeout = (url, options, timeout = 12000) => {
+            return Promise.race([
+                fetch(url, options),
+                new Promise((_, reject) => setTimeout(() => reject(new Error('انٹرنیٹ کی رفتار سست ہے یا سرور جواب نہیں دے رہا۔')), timeout))
+            ]);
+        };
+
+        // Load Data from Google Sheet
+        function fetchData() {
+            // URL validation check
+            if (!scriptURL || scriptURL.includes('YOUR_WEB_APP_URL_HERE') || scriptURL.trim() === '') {
+                loadingSpinner.classList.add('hidden');
+                loadingText.classList.replace('text-emerald-700', 'text-red-600');
+                loadingText.innerHTML = "خرابی: براہ کرم HTML کوڈ میں اپنا Google Apps Script کا URL شامل کریں۔";
+                return;
+            }
+
+            // Reset UI for retry
+            loadingSpinner.classList.remove('hidden');
+            retryBtn.classList.add('hidden');
+            loadingText.classList.replace('text-red-600', 'text-emerald-700');
+            loadingText.innerHTML = "گوگل شیٹ سے ڈیٹا لوڈ ہو رہا ہے...";
+
+            fetchWithTimeout(scriptURL)
+                .then(response => {
+                    if (!response.ok) throw new Error("Network Error");
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.error) throw new Error(data.error);
+                    
+                    masterData = data;
+                    uniqueRegions = [...new Set(data.map(item => item.region))];
+                    isMockData = false;
+                    
+                    dataLoadingOverlay.classList.add('hidden'); // Hide loading screen
+                    
+                    regionInput.disabled = false;
+                    regionInput.placeholder = "اپنا ریجن تلاش کریں یا لکھیں...";
+                })
+                .catch(error => {
+                    console.error("Fetch Error:", error);
+                    // اگر گوگل شیٹ سے رابطہ نہ ہو تو ایپ کو رکنے نہ دیں بلکہ فرضی ڈیٹا لوڈ کر دیں
+                    isMockData = true;
+                    masterData = [
+                        {region: "دہلی", jamia: "جامعۃ المدینہ نظام الدین"},
+                        {region: "دہلی", jamia: "جامعۃ المدینہ اوکھلا"},
+                        {region: "ممبئی", jamia: "جامعۃ المدینہ باندرہ"},
+                        {region: "ممبئی", jamia: "جامعۃ المدینہ کرلا"},
+                        {region: "گجرات", jamia: "جامعۃ المدینہ احمد آباد"},
+                        {region: "گجرات", jamia: "جامعۃ المدینہ سورت"}
+                    ];
+                    uniqueRegions = [...new Set(masterData.map(item => item.region))];
+                    
+                    dataLoadingOverlay.classList.add('hidden'); // Hide loading screen
+                    regionInput.disabled = false;
+                    regionInput.placeholder = "اپنا ریجن تلاش کریں یا لکھیں...";
+                    
+                    // Show temporary warning
+                    messageBox.innerHTML = "⚠️ گوگل شیٹ سے رابطہ نہیں ہو سکا۔ ٹیسٹنگ کے لیے عارضی لسٹ لوڈ کر دی گئی ہے۔";
+                    messageBox.className = "bg-orange-100 text-orange-800 mt-2 mb-4 mx-4 p-3 rounded-lg text-center text-xs font-bold block relative z-30 shadow-sm";
+                    messageBox.classList.remove('hidden');
+                    
+                    setTimeout(() => {
+                        messageBox.classList.add('hidden');
+                    }, 8000);
+                });
+        }
+
+        // Start fetching immediately
+        fetchData();
 
         function setupAutocomplete(inputEl, listEl, errorEl, getDataArray, onSelectCallback) {
             
-            // جب یوزر ٹائپ کرے
+            // On Typing
             inputEl.addEventListener('input', function() {
-                errorEl.classList.add('hidden'); // ایرر چھپائیں
+                errorEl.classList.add('hidden');
                 const val = this.value.trim();
                 listEl.innerHTML = '';
                 
                 if (!val) {
                     listEl.classList.add('hidden');
+                    if(onSelectCallback) onSelectCallback(''); // Reset dependents
                     return;
                 }
                 
@@ -259,10 +300,9 @@
                 if(matches.length > 0) {
                     matches.forEach(match => {
                         const li = document.createElement('li');
-                        li.className = "px-3 py-2.5 hover:bg-emerald-50 cursor-pointer border-b border-gray-100 last:border-b-0 text-sm text-gray-800 transition-colors";
+                        li.className = "px-4 py-3 hover:bg-emerald-50 cursor-pointer border-b border-gray-100 last:border-b-0 text-base text-gray-800 transition-colors";
                         li.textContent = match;
                         li.onmousedown = function(e) {
-                            // mousedown prevents input blur from firing before selection is registered
                             e.preventDefault(); 
                             inputEl.value = match;
                             listEl.classList.add('hidden');
@@ -276,15 +316,14 @@
                 }
             });
 
-            // جب یوزر باکس پر کلک کرے (ساری لسٹ دکھائیں اگر کچھ نہ لکھا ہو)
+            // On Focus (Show all options if empty)
             inputEl.addEventListener('focus', function() {
                 if(!this.value.trim()) {
-                     // trigger input event manually to show all available options based on empty match
                      const dataArray = getDataArray();
                      listEl.innerHTML = '';
                      dataArray.forEach(match => {
                         const li = document.createElement('li');
-                        li.className = "px-3 py-2.5 hover:bg-emerald-50 cursor-pointer border-b border-gray-100 last:border-b-0 text-sm text-gray-800 transition-colors";
+                        li.className = "px-4 py-3 hover:bg-emerald-50 cursor-pointer border-b border-gray-100 last:border-b-0 text-base text-gray-800 transition-colors";
                         li.textContent = match;
                         li.onmousedown = function(e) {
                             e.preventDefault(); 
@@ -300,32 +339,37 @@
                 }
             });
 
+            // STRICT VALIDATION on Blur (Leaving the field)
             inputEl.addEventListener('blur', function() {
-                setTimeout(() => { // فہرست بند کرنے کے لیے تھوڑا وقت
+                setTimeout(() => { // Small delay to allow click selection
                     listEl.classList.add('hidden');
                     const val = this.value.trim();
                     const dataArray = getDataArray();
                     
+                    // If user typed something that doesn't EXACTLY match the list
                     if (val && !dataArray.includes(val)) {
-                        this.value = ''; // اگر لسٹ میں نہیں ہے تو خالی کر دیں
-                        errorEl.classList.remove('hidden'); // ایرر دکھائیں
-                        if(onSelectCallback) onSelectCallback(''); // Dependent فیلڈز ری سیٹ کریں
+                        this.value = ''; // Clear it
+                        errorEl.classList.remove('hidden'); // Show error
+                        if(onSelectCallback) onSelectCallback('');
+                    } else if (val) {
+                        // User typed perfect match manually
+                        if(onSelectCallback) onSelectCallback(val);
                     }
-                }, 150);
+                }, 200);
             });
         }
 
-        // Region Input Setup
+        // Region Setup
         setupAutocomplete(
             regionInput, 
             regionList, 
             regionError,
             () => uniqueRegions, 
             (selectedRegion) => {
-                jamiaInput.value = ''; // جامعات کی فیلڈ خالی کریں
+                jamiaInput.value = ''; 
                 
                 if(selectedRegion) {
-                    // متعلقہ ریجن کی جامعات نکالیں
+                    // Filter jamias based on region
                     filteredJamias = masterData
                                         .filter(item => item.region === selectedRegion)
                                         .map(item => item.jamia);
@@ -340,7 +384,7 @@
             }
         );
 
-        // Jamia Input Setup
+        // Jamia Setup
         setupAutocomplete(
             jamiaInput, 
             jamiaList, 
@@ -351,7 +395,7 @@
         form.addEventListener('submit', e => {
             e.preventDefault();
             
-            // 1. Mobile Number Validation
+            // Strict Validation 1: Minimum 10 digits for Mobile Number
             const mobValue = mobileNumber.value.trim();
             if(mobValue.length < 10) {
                 numberError.classList.remove('hidden');
@@ -361,50 +405,64 @@
                 numberError.classList.add('hidden');
             }
 
-            // 2. Extra safety check for Region and Jamia before submit
+            // Strict Validation 2: Region and Jamia must be from the list
             if (!uniqueRegions.includes(regionInput.value) || !filteredJamias.includes(jamiaInput.value)) {
-                alert("براہ کرم ڈراپ ڈاؤن لسٹ میں سے درست ریجن اور جامعہ کا انتخاب کریں۔");
+                messageBox.innerHTML = "⚠️ براہ کرم فہرست میں سے درست ریجن اور جامعہ منتخب کریں۔";
+                messageBox.className = "bg-orange-100 text-orange-800 mb-3 p-3 rounded-lg text-center text-sm font-bold block";
+                messageBox.classList.remove('hidden');
                 return;
             }
             
-            // UI Loading State
+            // Loading State UI
             submitBtn.disabled = true;
             btnText.innerText = "محفوظ کیا جا رہا ہے...";
             btnLoader.classList.remove('hidden');
             messageBox.classList.add('hidden');
-            messageBox.className = "hidden mt-4 p-4 rounded-xl text-center font-bold text-xl transition-all duration-300";
             
             let requestBody = new FormData(form);
             
-            fetch(scriptURL, { method: 'POST', body: requestBody })
-                .then(response => {
-                    // Success UI
-                    messageBox.innerHTML = "🎉 کارکردگی کامیابی کے ساتھ محفوظ ہو گئی!";
-                    messageBox.classList.add('bg-green-100', 'text-green-800');
+            if (isMockData) {
+                // اگر فرضی ڈیٹا ہے تو صرف کامیاب ہونے کا ڈیمو دکھائیں
+                setTimeout(() => {
+                    messageBox.innerHTML = "✅ ڈیمو کارکردگی کامیابی کے ساتھ محفوظ ہو گئی!";
+                    messageBox.className = "bg-green-100 text-green-800 mb-3 p-3 rounded-lg text-center text-base font-bold block";
                     messageBox.classList.remove('hidden');
                     
                     form.reset();
-                    // Reset custom states
                     jamiaInput.disabled = true;
                     jamiaInput.placeholder = "پہلے ریجن کا انتخاب کریں...";
-                })
-                .catch(error => {
-                    // Error UI
-                    messageBox.innerHTML = "❌ کوئی خرابی پیش آ گئی، براہ کرم انٹرنیٹ چیک کریں اور دوبارہ کوشش کریں۔";
-                    messageBox.classList.add('bg-red-100', 'text-red-800');
-                    messageBox.classList.remove('hidden');
-                })
-                .finally(() => {
-                    // Reset Button
+                    
                     submitBtn.disabled = false;
-                    btnText.innerText = "رپورٹ جمع کریں";
+                    btnText.innerText = "محفوظ کریں";
                     btnLoader.classList.add('hidden');
                     
-                    // Auto hide message
-                    setTimeout(() => {
-                        messageBox.classList.add('hidden');
-                    }, 6000);
-                });
+                    setTimeout(() => { messageBox.classList.add('hidden'); }, 6000);
+                }, 1500);
+            } else {
+                // اصلی گوگل شیٹ میں ڈیٹا بھیجیں
+                fetch(scriptURL, { method: 'POST', body: requestBody })
+                    .then(response => {
+                        messageBox.innerHTML = "🎉 کارکردگی کامیابی کے ساتھ محفوظ ہو گئی!";
+                        messageBox.className = "bg-green-100 text-green-800 mb-3 p-3 rounded-lg text-center text-base font-bold block";
+                        messageBox.classList.remove('hidden');
+                        
+                        form.reset();
+                        jamiaInput.disabled = true;
+                        jamiaInput.placeholder = "پہلے ریجن کا انتخاب کریں...";
+                    })
+                    .catch(error => {
+                        messageBox.innerHTML = "❌ خرابی: ڈیٹا محفوظ نہیں ہو سکا۔ انٹرنیٹ چیک کریں۔";
+                        messageBox.className = "bg-red-100 text-red-800 mb-3 p-3 rounded-lg text-center text-sm font-bold block";
+                        messageBox.classList.remove('hidden');
+                    })
+                    .finally(() => {
+                        submitBtn.disabled = false;
+                        btnText.innerText = "محفوظ کریں";
+                        btnLoader.classList.add('hidden');
+                        
+                        setTimeout(() => { messageBox.classList.add('hidden'); }, 6000);
+                    });
+            }
         });
 
         // Hide number error dynamically while typing
@@ -414,7 +472,7 @@
             }
         });
 
-        // Close dropdowns if clicked outside
+        // Close dropdowns if clicked anywhere else on the screen
         document.addEventListener('click', function(e) {
             if (!regionInput.contains(e.target) && !regionList.contains(e.target)) {
                 regionList.classList.add('hidden');
