@@ -8,24 +8,17 @@
     <script src="https://cdn.tailwindcss.com"></script>
     
     <style>
-        /* جمیل نوری نستعلیق فونٹ کو ڈائریکٹ امپورٹ کرنا */
-        @font-face {
-            font-family: 'Jameel Noori Nastaleeq';
-            src: url('https://cdn.jsdelivr.net/gh/urduhack/fonts@master/jameel-noori-nastaleeq/JameelNooriNastaleeq.woff2') format('woff2'),
-                 url('https://cdn.jsdelivr.net/gh/urduhack/fonts@master/jameel-noori-nastaleeq/JameelNooriNastaleeq.woff') format('woff');
-            font-weight: normal;
-            font-style: normal;
-            font-display: swap;
-        }
+        /* گوگل کا مستند نستعلیق فونٹ امپورٹ کریں تاکہ 404 کا ایرر نہ آئے */
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap');
 
         body {
-            font-family: 'Jameel Noori Nastaleeq', 'Arial', sans-serif;
+            font-family: 'Noto Nastaliq Urdu', 'Arial', sans-serif;
             background-color: #f0fdf4;
             line-height: 2.2; /* نستعلیق کے لیے لائن ہائٹ زیادہ رکھی گئی ہے */
         }
 
         h1, h2, h3, p, label, input, button, li {
-            font-family: 'Jameel Noori Nastaleeq', 'Arial', sans-serif;
+            font-family: 'Noto Nastaliq Urdu', 'Arial', sans-serif;
         }
         
         /* ان پٹ فیلڈز کے اندر ٹیکسٹ کا سائز تھوڑا بڑا ہونا چاہیے تاکہ نستعلیق واضح نظر آئے */
@@ -193,7 +186,7 @@
 
     <script>
         // ⚠️ یہاں اپنا نيا Google Apps Script کا Web App URL پیسٹ کریں
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbzK2FH2YbPP6G3_t8AlKt6VCB7PbiPSwME3a2I6m5BdQm7xFXftrJmhr2YQj-oIVGfV/exec';
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbycFGjq2cZRbAGZllGqah1sW336qm2Lqmeu_avSAxRI4xVo9IXvLqdAqV4xaOx05aFn/exec';
 
         // DOM Elements
         const form = document.getElementById('karkardagiForm');
@@ -221,8 +214,16 @@
         let filteredJamias = [];
 
         fetch(scriptURL)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) throw new Error('Network response was not ok');
+                return response.json();
+            })
             .then(data => {
+                // اگر Apps script نے کوئی ایرر بھیجا ہے تو وہ دکھائیں
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                
                 masterData = data;
                 
                 // ریجنز کی منفرد (Unique) لسٹ بنانا
@@ -236,7 +237,7 @@
             })
             .catch(error => {
                 console.error("Data loading error:", error);
-                dataLoadingOverlay.innerHTML = '<p class="text-red-600 font-bold text-xl">ڈیٹا لوڈ کرنے میں مسئلہ ہے۔ اپنا انٹرنیٹ چیک کریں یا صفحہ ریفریش کریں۔</p>';
+                dataLoadingOverlay.innerHTML = `<p class="text-red-600 font-bold text-xl text-center px-4">خرابی: ${error.message || 'ڈیٹا لوڈ کرنے میں مسئلہ ہے۔ براہ کرم لنک چیک کریں۔'}</p>`;
             });
 
         function setupAutocomplete(inputEl, listEl, errorEl, getDataArray, onSelectCallback) {
