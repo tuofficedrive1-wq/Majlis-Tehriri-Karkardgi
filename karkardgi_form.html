@@ -440,7 +440,7 @@
                 }, 1500);
             } else {
                 // اصلی گوگل شیٹ میں ڈیٹا بھیجیں
-                fetch(scriptURL, { method: 'POST', body: requestBody })
+                fetch(scriptURL, { method: 'POST', body: requestBody, mode: 'no-cors' })
                     .then(response => {
                         messageBox.innerHTML = "🎉 کارکردگی کامیابی کے ساتھ محفوظ ہو گئی!";
                         messageBox.className = "bg-green-100 text-green-800 mb-3 p-3 rounded-lg text-center text-base font-bold block";
