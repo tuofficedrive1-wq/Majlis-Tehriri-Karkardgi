@@ -207,7 +207,7 @@
         let isMockData = false; // نیا ویری ایبل چیک کرنے کے لیے کہ اصلی ڈیٹا ہے یا فرضی
 
         // Fetch with Timeout to prevent infinite loading
-        const fetchWithTimeout = (url, options, timeout = 12000) => {
+        
         const fetchWithTimeout = (url, options, timeout = 12000) => {
             return Promise.race([
                 fetch(url, options),
